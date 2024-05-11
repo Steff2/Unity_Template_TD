@@ -1,0 +1,90 @@
+behaviors:
+  AttackAgent:
+    trainer_type: poca
+    hyperparameters:
+      #size per batch of new experiences, several times lower than buffer_size, high for continuous low for discrete
+      batch_size: 128
+      #size of new experiences before policy model update
+      buffer_size: 8192
+      #learning rate along gradient descent - should decrease if training unstable and no consistent reward increase
+      learning_rate: 0.0003
+      #randomness - if entropy drop too quickly, increase
+      beta: 0.01
+      #speed of policy change - small is more stable, but slower
+      epsilon: 0.15
+      #bias towards current reward
+      lambd: 0.95
+      num_epoch: 3
+      learning_rate_schedule: linear
+      
+    network_settings:
+      normalize: false
+      hidden_units: 512
+      num_layers: 2
+      
+    reward_signals:
+      extrinsic:
+        #low is for getting lots of rewards now, high is for getting rewards in the future and prepare now
+        gamma: 0.99
+        strength: 1.0
+      # memory
+      #memory:
+      #  sequence_length: 64
+      #  memory_size: 256    
+    keep_checkpoints: 5
+    max_steps: 5000000
+    time_horizon: 500
+    summary_freq: 60000
+
+    # self-play
+    self_play:
+      window: 10
+      play_against_latest_model_ratio: 0.7
+      save_steps: 50000
+      swap_steps: 5000
+      team_change: 100000
+      
+  DefenseAgent:
+    trainer_type: poca
+    hyperparameters:
+      #size per batch of new experiences, several times lower than buffer_size, high for continuous low for discrete
+      batch_size: 2048
+      #size of new experiences before policy model update
+      buffer_size: 81920
+      #learning rate along gradient descent - should decrease if training unstable and no consistent reward increase
+      learning_rate: 0.0003
+      #randomness - if entropy drop too quickly, increase
+      beta: 0.0005
+      #speed of policy change - small is more stable, but slower
+      epsilon: 0.15
+      #bias towards current reward
+      lambd: 0.95
+      num_epoch: 3
+      learning_rate_schedule: linear
+      
+    network_settings:
+      normalize: false
+      hidden_units: 512
+      num_layers: 2
+      
+    reward_signals:
+      extrinsic:
+        #low is for getting lots of rewards now, high is for getting rewards in the future and prepare now
+        gamma: 0.99
+        strength: 1.0
+      # memory
+      #memory:
+      #  sequence_length: 64
+      #  memory_size: 256    
+    keep_checkpoints: 5
+    max_steps: 5000000
+    time_horizon: 500
+    summary_freq: 60000
+     
+    # self-play
+    self_play:
+      window: 10
+      play_against_latest_model_ratio: 0.7
+      save_steps: 50000
+      swap_steps: 5000
+      team_change: 100000
